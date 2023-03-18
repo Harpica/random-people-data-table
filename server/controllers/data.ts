@@ -94,11 +94,12 @@ async function getNameAndAddress(
 
 function getPhoneNumber(random: seedrandom.PRNG, region: string) {
     if (PHONE_CODES[region]) {
-        const phoneRange = 10 ** PHONE_CODES[region].length;
+        const phoneRangeMin = 10 ** (PHONE_CODES[region].length - 1) - 1;
+        const phoneRangeMax = 10 ** PHONE_CODES[region].length;
         return `${PHONE_CODES[region].code} ${randomNumber(
             random,
-            0,
-            phoneRange
+            phoneRangeMin,
+            phoneRangeMax
         )}`;
     }
 }
