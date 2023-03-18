@@ -1,8 +1,8 @@
 const fs = require('fs');
 const readline = require('readline');
 
-const input_path = 'poland-result.csv';
-const output_path = 'adresses.txt';
+const input_path = 'adresses.txt';
+const output_path = 'adresses-new.txt';
 
 const inputStream = fs.createReadStream(input_path);
 const outputStream = fs.createWriteStream(output_path, { encoding: 'utf8' });
@@ -12,7 +12,11 @@ const lineReader = readline.createInterface({
 });
 lineReader.on('line', function (line) {
     outputStream.write(
-        line.replaceAll(',', ', ').replaceAll('"', '').replaceAll(',  ', ' ') +
-            '\n'
+        line.replaceAll(
+            '00-000',
+            `${Math.floor(Math.random() * 99)}-${Math.floor(
+                Math.random() * 99
+            )}`
+        ) + '\n'
     );
 });
