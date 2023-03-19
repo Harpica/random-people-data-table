@@ -4,7 +4,12 @@ import seedrandom from 'seedrandom';
 import nthline from 'nthline';
 import path from 'path';
 import { ERR_TYPES, PHONE_CODES } from '../utils/constants';
-import { randomNumber } from '../utils/utils';
+import {
+    addSymbol,
+    deleteSymbol,
+    randomNumber,
+    swapSymbol,
+} from '../utils/utils';
 
 interface Person {
     id: string;
@@ -28,14 +33,33 @@ export const getData = async (
     const region = req.params.region;
     const seedWithPage = seed + page;
     const random = seedrandom(seedWithPage);
-    let data: Array<Person> = [];
-    for (let i = 0; i < 20; i++) {
-        const person = await setPerson(random, linesNumbers, region, dataPath);
-        console.log(person);
-        data.push(person);
-    }
+    const data = await getPeopleArray(
+        random,
+        linesNumbers,
+        region,
+        dataPath,
+        errNumber
+    );
+
     res.send(data);
 };
+
+async function getPeopleArray(
+    random: seedrandom.PRNG,
+    linesNumbers: LinesNumbers,
+    region: string,
+    dataPath: string,
+    errNumber: number
+) {
+    let data: Array<Person> = [];
+    for (let i = 0; i < 20; i++) {
+        let person = await setPerson(random, linesNumbers, region, dataPath);
+        person = setErrors(random, region, errNumber, person) as Person;
+        data.push(person);
+    }
+
+    return data;
+}
 
 async function setPerson(
     random: seedrandom.PRNG,
@@ -86,6 +110,7 @@ async function getNameAndAddress(
             addressLine,
             path.join(basePath + 'addresses.txt')
         );
+
         return { name: firstName + ' ' + lastName, address: address };
     } catch (err) {
         console.log(err);
@@ -96,6 +121,7 @@ function getPhoneNumber(random: seedrandom.PRNG, region: string) {
     if (PHONE_CODES[region]) {
         const phoneRangeMin = 10 ** (PHONE_CODES[region].length - 1) - 1;
         const phoneRangeMax = 10 ** PHONE_CODES[region].length;
+
         return `${PHONE_CODES[region].code} ${randomNumber(
             random,
             phoneRangeMin,
@@ -110,29 +136,46 @@ function getId(random: seedrandom.PRNG) {
 
 function setErrors(
     random: seedrandom.PRNG,
+    region: string,
     errNumber: number,
     data: { [key: string]: string }
 ) {
     let errCounter = errNumber;
     const fieldsKeys = Object.keys(data);
+
     while (errCounter > 0) {
-        const fieldKey =
-            fieldsKeys[randomNumber(random, 0, fieldsKeys.length - 1)];
-        const field = data[fieldKey];
-        const errType = randomNumber(random, 0, ERR_TYPES._length - 1);
+        let isError: boolean = true;
+        if (errNumber < 1) {
+            isError = randomNumber(random) <= errNumber;
+        }
+        if (isError) {
+            const fieldKey =
+                fieldsKeys[randomNumber(random, 0, fieldsKeys.length)];
+            const field = data[fieldKey];
+            const errType = randomNumber(random, 0, ERR_TYPES._length);
+            data[fieldKey] = makeError(random, region, field, errType);
+            errCounter -= 1;
+        }
     }
+    return data as unknown;
 }
 
-function makeError(string: string, type: ERR_TYPES) {
+function makeError(
+    random: seedrandom.PRNG,
+    region: string,
+    string: string,
+    type: ERR_TYPES
+): string {
+    const index = randomNumber(random, 0, string.length - 1);
+
     switch (type) {
         case ERR_TYPES.delete:
-            break;
+            return deleteSymbol(string, index);
         case ERR_TYPES.add:
-            break;
+            return addSymbol(random, region, string, index);
         case ERR_TYPES.swap:
-            break;
-
+            return swapSymbol(string, index);
         default:
-            break;
+            return string;
     }
 }
