@@ -1,7 +1,8 @@
+import { observer } from 'mobx-react-lite';
 import { MainViewChildProps } from '../utils/types';
 import SVGRandom from './SVGRandom';
 
-const Fieldset: React.FC<MainViewChildProps> = ({ vm }) => {
+const Fieldset: React.FC<MainViewChildProps> = observer(({ vm }) => {
     return (
         <fieldset>
             <div className='flex justify-between'>
@@ -79,6 +80,6 @@ const Fieldset: React.FC<MainViewChildProps> = ({ vm }) => {
             </div>
         </fieldset>
     );
-};
+});
 
 export default Fieldset;

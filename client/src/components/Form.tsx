@@ -1,8 +1,9 @@
+import { observer } from 'mobx-react-lite';
 import { MainViewChildProps } from '../utils/types';
 import ExportData from './ExportData';
 import Fieldset from './Fieldset';
 
-const Form: React.FC<MainViewChildProps> = ({ vm }) => {
+const Form: React.FC<MainViewChildProps> = observer(({ vm }) => {
     return (
         <form
             className='flex flex-col justify-center gap-2 bg-white p-4 shadow-md rounded max-w-2xl m-auto'
@@ -23,6 +24,6 @@ const Form: React.FC<MainViewChildProps> = ({ vm }) => {
             </div>
         </form>
     );
-};
+});
 
 export default Form;
