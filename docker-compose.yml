@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+
+  node:
+    container_name: random-people-data-table
+    build: ./server
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - $PORT:$PORT
+    expose:
+      - $PORT
+    environment:
+      - PORT=$PORT
+    networks:
+      - frontend
+
+  react:
+    container_name: UI_random-people-data-table
+    depends_on:
+      - node
+    build:
+      context: ./client
+    ports:
+      - $CLIENT_PORT:80
+    networks:
+      - frontend
+
+networks:
+  frontend:

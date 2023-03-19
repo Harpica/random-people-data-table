@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 
-const PORT = process.env.APP_PORT || 5000;
+const PORT = process.env.PORT || 5000;
 const DATASETS_PATH = path.join(__dirname, 'datasets');
 
 const corsOptions = {
