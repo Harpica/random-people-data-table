@@ -9,8 +9,8 @@ const MainView = observer(() => {
     const [vm] = useState(new MainVM(api));
 
     return (
-        <div className='w-full flex justify-center bg-gradient-to-r from-sky-500 to-indigo-500'>
-            <div className='h-screen w-full 2xl:max-w-screen-2xl flex flex-col items-center sm:p-7 gap-5 box-border'>
+        <div className='w-full h-fit min-h-screen flex justify-center bg-gradient-to-r from-sky-500 to-indigo-500'>
+            <div className=' w-full 2xl:max-w-screen-2xl flex flex-col items-center sm:p-7 gap-5 box-border'>
                 <header>
                     <h1 className='font-bold text-3xl uppercase text-white'>
                         Random people data generator
