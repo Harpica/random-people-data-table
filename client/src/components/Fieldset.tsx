@@ -30,7 +30,7 @@ const Fieldset: React.FC<MainViewChildProps> = observer(({ vm }) => {
                     name='errorsRange'
                     min={0}
                     max={10}
-                    defaultValue={0}
+                    value={vm.errNumber}
                     step={0.25}
                     onChange={(e) => {
                         vm.setErrNumber = e.currentTarget.value;

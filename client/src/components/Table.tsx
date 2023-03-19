@@ -68,7 +68,7 @@ const Table: React.FC<MainViewChildProps> = observer(({ vm }) => {
                 loader={<h4>Loading...</h4>}
                 scrollableTarget='scrollableDiv'
             >
-                <table className='   table-auto w-full box-border text-left'>
+                <table className='   table-auto box-border text-left'>
                     <thead className='border-b border-blue-900'>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <tr key={headerGroup.id}>
@@ -96,7 +96,7 @@ const Table: React.FC<MainViewChildProps> = observer(({ vm }) => {
                                 {row.getVisibleCells().map((cell) => (
                                     <td
                                         key={cell.id}
-                                        className='w-auto max-w-sm box-border p-1'
+                                        className='w-auto max-w-[20vw] box-border p-1 break-words'
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,
