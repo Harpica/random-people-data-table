@@ -1,3 +1,6 @@
+import React, { useState, useEffect } from 'react';
+import { toJS } from 'mobx';
+import { observer } from 'mobx-react-lite';
 import {
     ColumnDef,
     createColumnHelper,
@@ -5,13 +8,9 @@ import {
     getCoreRowModel,
     useReactTable,
 } from '@tanstack/react-table';
-import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Person } from '../utils/types';
-import { MainVM } from '../viewModels/Main.VM';
-import { observer } from 'mobx-react-lite';
-import { toJS, trace } from 'mobx';
-import { useCallback, useRef, useMemo, useState, useEffect } from 'react';
+import Loader from './Loader';
+import { MainViewChildProps, Person } from '../utils/types';
 
 const columnHelper = createColumnHelper<Person>();
 const columns: ColumnDef<Person, any>[] = [
@@ -39,20 +38,13 @@ const columns: ColumnDef<Person, any>[] = [
     }),
 ];
 
-interface TableProps {
-    vm: MainVM;
-}
-
-const Table: React.FC<TableProps> = observer(({ vm }) => {
+const Table: React.FC<MainViewChildProps> = observer(({ vm }) => {
     // TanTable doesn't support MobX state
     const [data, setData] = useState(toJS(vm.data));
 
     useEffect(() => {
         setData(vm.data.slice());
-        console.log('update', data);
-    }, [vm.data.length]);
-
-    trace();
+    }, [vm.data]);
 
     const table = useReactTable<Person>({
         data: data,
@@ -62,9 +54,11 @@ const Table: React.FC<TableProps> = observer(({ vm }) => {
 
     return (
         <div
-            className=' bg-white shadow-md rounded p-4 overflow-auto'
+            className='relative bg-white shadow-md rounded p-4 overflow-auto scrollbar'
             id='scrollableDiv'
         >
+            {vm.state === 'pending' && <Loader />}
+
             <InfiniteScroll
                 dataLength={vm.data.length}
                 next={() => {

@@ -13,3 +13,15 @@
 /* Stop purging. */
 
 /* Your own custom utilities */
+.scrollbar::-webkit-scrollbar {
+    width: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    /* background-color: blueviolet; */
+    @apply bg-sky-500 rounded;
+}
+.scrollbar::-webkit-scrollbar-track {
+    /* background-color: blueviolet; */
+    @apply bg-transparent;
+}
