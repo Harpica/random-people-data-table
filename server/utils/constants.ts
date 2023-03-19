@@ -46,6 +46,6 @@ export const ALPHABETS: { [key: string]: Array<string> } = {
         'ź',
         'ż',
     ].concat(LATIN_ALPHABET),
+    ES: ['ñ'].concat(LATIN_ALPHABET),
     US: LATIN_ALPHABET,
-    ES: LATIN_ALPHABET,
 };
