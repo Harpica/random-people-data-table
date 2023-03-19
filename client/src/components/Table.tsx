@@ -63,7 +63,6 @@ const Table: React.FC<MainViewChildProps> = observer(({ vm }) => {
                 dataLength={vm.data.length}
                 next={() => {
                     vm.handleLoadNewPage();
-                    console.log('next');
                 }}
                 hasMore={true}
                 loader={<h4>Loading...</h4>}
